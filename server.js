@@ -6,6 +6,7 @@ const PORT = 3000;
 
 app.use(bodyParser.json());
 
+// Main Endpoint
 app.get('/', (req, res) => {
     res.send('This is the default endpoint for Post-MS.');
 });
