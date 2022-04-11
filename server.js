@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 // Global Variables
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // Parse JSON
 app.use(bodyParser.json());
@@ -83,7 +83,6 @@ app.delete('/post/:id', (req, res) => {
         if (err) throw err;
     })
 })
-
 
 app.listen(PORT, () => {
     console.log(`Service running on ${PORT}.`);
