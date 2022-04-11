@@ -9,4 +9,4 @@ mongoose.model('Post', {
         type: String,
         required: true
     }
-})
+});
