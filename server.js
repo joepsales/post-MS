@@ -1,12 +1,32 @@
 process.env.NODE_ENV = 'development';
 
 // Project Imports
-const express = require('express');
 const app = require('./app');
 const cors = require('cors');
+const axios = require('axios');
+const bodyParser = require('body-parser');
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+require('dotenv').config();
+
+const token = process.env.ACCESS_TOKEN;
+const pageId = process.env.PAGE_ID;
 
 const http = require('http');
 const debug = require('debug')('node-angular');
+
+app.post('/posttopage', (req, res) => {
+    const text = req.body.text;
+
+    axios.post(`https://graph.facebook.com/${pageId}/feed?message=${text}&access_token=${token}`, null)
+    .then(result => {
+        res.status(200).json({ message: `Succesfully published Facebook post to page ${pageId}.` });
+    }).catch((err) => {
+        res.status(500).send(err);
+    })
+})
 
 const normalizePort = val => {
     var port = parseInt(val, 10);
@@ -15,7 +35,7 @@ const normalizePort = val => {
         return val;
     }
 
-    if (port >= 0){
+    if (port >= 0) {
         return port;
     }
 
@@ -27,7 +47,7 @@ const onError = error => {
         throw error;
     }
     const bind = typeof addr === "string" ? "pipe " + addr : "port " + port;
-    switch(error.code) {
+    switch (error.code) {
         case "EACCES":
             console.error(bind + " requires elevated privileges");
             process.exit(1);
@@ -47,7 +67,9 @@ const onListening = () => {
     debug("Listening on " + bind);
 }
 
-const port  = normalizePort(process.env.PORT || "3000");
+
+
+const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 app.use(cors());
 
