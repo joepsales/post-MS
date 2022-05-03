@@ -9,7 +9,6 @@ const router = express.Router();
 const token = process.env.ACCESS_TOKEN;
 const pageId = process.env.PAGE_ID;
 
-console.log(token);
 // Create Post
 router.post('', (req, res, next) => {
     const post = new Post({
