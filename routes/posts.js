@@ -2,12 +2,26 @@ const express = require('express');
 const Post = require('../models/Post');
 const FbPost = require('../models/FbPost');
 const axios = require('axios');
+const amqp = require('amqplib/callback_api');
 
 require('dotenv').config({ path: require('find-config')('.env') })
 const router = express.Router();
 
 const token = process.env.ACCESS_TOKEN;
 const pageId = process.env.PAGE_ID;
+
+// Message Broker
+amqp.connect('amqps://lzvlbhtr:6cvrOb5ZwKBJ1bJJJ3OOMKESR0Jhoyd8@chinook.rmq.cloudamqp.com/lzvlbhtr', (error0, connection) => {
+    if(error0){
+        throw error0
+    }
+
+    connection.createChannel((error1, channel) => {
+        if(error1){
+            throw error1
+        }
+    })
+})
 
 // Create Post
 router.post('', (req, res, next) => {
