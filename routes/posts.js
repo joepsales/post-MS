@@ -34,12 +34,12 @@ router.post('/facebook', (req, res, next) => {
     }).catch((err) => {
         res.status(500).send(err);
     })
-    // fbPost.save()
-    // .then(createdPost => {
-    //     res.status(201).send(createdPost);
-    // }).catch((err) => {
-    //     res.status(400).send(err);
-    // });
+    fbPost.save()
+        .then(createdPost => {
+            res.status(201).send(createdPost);
+        }).catch((err) => {
+            res.status(400).send(err);
+        });
 })
 
 // Update Post By ID
