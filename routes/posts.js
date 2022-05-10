@@ -28,12 +28,11 @@ amqp.connect('amqps://lzvlbhtr:6cvrOb5ZwKBJ1bJJJ3OOMKESR0Jhoyd8@chinook.rmq.clou
                 location: req.body.location
             });
             post.save()
-                .then(createdPost => {
-                    channel.sendToQueue('post_created', Buffer.from(JSON.stringify(createdPost)));
-                    res.status(201).send(createdPost);
-                }).catch((err) => {
-                    res.status(400).send(err);
-                });
+            .then(createdPost => {
+                res.status(201).send(createdPost);
+            }).catch((err) => {
+                res.status(400).send(err);
+            });
         })
 
         // Create Facebook Post
@@ -41,18 +40,23 @@ amqp.connect('amqps://lzvlbhtr:6cvrOb5ZwKBJ1bJJJ3OOMKESR0Jhoyd8@chinook.rmq.clou
             const fbPost = new FbPost({
                 content: req.body.content,
             });
-            axios.post(`https://graph.facebook.com/${pageId}/feed?message=${fbPost.content}&access_token=${token}`, null)
-                .then(result => {
-                    res.status(200).json({ message: `Succesfully published Facebook post to page ${pageId}.` });
-                }).catch((err) => {
-                    res.status(500).send(err);
-                })
-            fbPost.save()
-                .then(createdPost => {
-                    res.status(201).send(createdPost);
-                }).catch((err) => {
-                    res.status(400).send(err);
-                });
+            channel.sendToQueue('post_created', Buffer.from(JSON.stringify(fbPost)));
+            console.log(`Post with content ${fbPost} posted to post_created.`);
+            // axios.post(`https://graph.facebook.com/${pageId}/feed?message=${fbPost.content}&access_token=${token}`, null)
+            //     .then(result => {
+            //         res.status(200).json({ message: `Succesfully published Facebook post to page ${pageId}.` });
+            //     }).catch((err) => {
+            //         console.log('error')
+            //         res.status(500).send(err);
+            //     })
+            // fbPost.save();
+
+
+            //     .then(createdPost => {
+            //         res.status(201).send(createdPost);
+            //     }).catch((err) => {
+            //         res.status(400).send(err);
+            //     });
         })
 
         // Update Post By ID
