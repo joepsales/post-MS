@@ -1,10 +1,8 @@
-FROM node:14-slim
+FROM node:alpine
 
-WORKDIR /usr/src/app/
-
-COPY package.json /usr/src/app/package.json
-COPY package-lock.json /usr/src/app/package.json
+WORKDIR /app
+COPY package.json .
 RUN npm install
-COPY . /usr/src/app/
-EXPOSE 3001
-CMD ["node", "server.js"]
+COPY . .
+
+CMD ["npm", "start"]
