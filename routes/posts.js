@@ -101,7 +101,7 @@ amqp.connect('amqps://lzvlbhtr:6cvrOb5ZwKBJ1bJJJ3OOMKESR0Jhoyd8@chinook.rmq.clou
         router.delete("/:id", (req, res, next) => {
             Post.deleteOne({ _id: req.params.id }).then(result => {
                 console.log(result);
-                channel.sendToQueue('post_deleted', Buffer.from(req.params.id));
+                // channel.sendToQueue('post_deleted', Buffer.from(req.params.id));
                 res.status(200).json({
                     message: 'Post deleted.'
                 });
