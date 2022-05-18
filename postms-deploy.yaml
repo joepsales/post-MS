@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: postms-service
+spec:
+  selector:
+    app: postms
+  ports:
+    - protocol: "TCP"
+      # Port accessible inside cluster
+      port: 3001
+      # Port to forward to inside the pod
+      targetPort: 3001
+      # Port accessible outside cluster
+      nodePort: 30002
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postms-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postms
+  template:
+    metadata:
+      labels:
+        app: postms
+    spec:
+      containers:
+        - name: postms
+          image: salesjoep/post-ms:latest
+          ports:
+            - containerPort: 3001

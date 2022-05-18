@@ -3,30 +3,15 @@ process.env.NODE_ENV = 'development';
 // Project Imports
 const app = require('./app');
 const cors = require('cors');
-const axios = require('axios');
+const amqp = require('amqplib/callback_api');
 const bodyParser = require('body-parser');
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-require('dotenv').config();
-
-const token = process.env.ACCESS_TOKEN;
-const pageId = process.env.PAGE_ID;
-
 const http = require('http');
 const debug = require('debug')('node-angular');
 
-app.post('/posttopage', (req, res) => {
-    const text = req.body.text;
-
-    axios.post(`https://graph.facebook.com/${pageId}/feed?message=${text}&access_token=${token}`, null)
-    .then(result => {
-        res.status(200).json({ message: `Succesfully published Facebook post to page ${pageId}.` });
-    }).catch((err) => {
-        res.status(500).send(err);
-    })
-})
+// Used Statements
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+require('dotenv').config();
 
 const normalizePort = val => {
     var port = parseInt(val, 10);
@@ -77,3 +62,4 @@ const server = http.createServer(app);
 server.on("error", onError);
 server.on("listening", onListening);
 server.listen(port);
+
