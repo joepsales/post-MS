@@ -39,6 +39,7 @@ jobs:
         push: true
         tags: salesjoep/post-ms:v1
         
+      #login
     - name: Azure Login
       uses: Azure/login@v1.4.4
       with:
