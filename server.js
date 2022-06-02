@@ -58,7 +58,7 @@ const onListening = () => {
 const port = normalizePort(process.env.PORT || "3000");
 app.set("port", port);
 app.use(cors());
-// Some update
+
 const server = http.createServer(app);
 server.on("error", onError);
 server.on("listening", onListening);
