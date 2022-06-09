@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./db/index');
 const cors = require('cors');
-
 const postsRoutes = require('./routes/posts');
 
 const app = express();
