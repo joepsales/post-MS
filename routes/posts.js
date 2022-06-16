@@ -108,13 +108,24 @@ amqp.connect('amqps://lzvlbhtr:6cvrOb5ZwKBJ1bJJJ3OOMKESR0Jhoyd8@chinook.rmq.clou
 
         // Get Post By ID
         router.get("/:id", (req, res, next) => {
-            Post.findById(req.params.id).then(post => {
-                if (post) {
-                    res.status(200).json(post);
-                } else {
-                    res.status(404).json({ message: 'Post not found' });
+            jwt.verify(
+                req.headers.authorization.replace("Bearer ", ""),
+                secret,
+                { algorithms: ["RS256"] },
+                function (err, decoded) {
+                    if (err) {
+                        throw err;
+                    }
+                    Post.findById(req.params.id).then(post => {
+                        if (post) {
+                            res.status(200).json(post);
+                        } else {
+                            res.status(404).json({ message: 'Post not found' });
+                        }
+                    });
                 }
-            });
+            )
+            
         });
 
         // Delete Post By ID
